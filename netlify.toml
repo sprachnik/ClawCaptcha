@@ -12,6 +12,15 @@
   command = "echo 'Static site - no build required'"
 
 # Headers for security and caching
+#
+# Cache strategy: assets are NOT fingerprinted (filenames don't change
+# between deploys), so we can't safely use `immutable` or long max-age —
+# stale assets would persist for the full TTL. Instead we use
+# `max-age=0, must-revalidate` so the browser issues a cheap conditional
+# GET each time and gets 304 Not Modified from Netlify's ETag whenever
+# the file hasn't changed. The bandwidth cost is negligible for a small
+# static site and redeploys take effect immediately.
+
 [[headers]]
   for = "/*"
   [headers.values]
@@ -20,14 +29,19 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
 
 [[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
   for = "/css/*"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/js/*"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 # Dev server settings
 [dev]

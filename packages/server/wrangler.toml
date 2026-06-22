@@ -1,0 +1,21 @@
+name = "clawcaptcha"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+[observability]
+enabled = true
+
+[vars]
+ENVIRONMENT = "production"
+CHALLENGE_TTL_MS = "300000"
+POW_DIFFICULTY = "18"
+TOKEN_EXPIRES_IN = "900"
+
+# Development overrides
+[env.dev]
+name = "clawcaptcha-dev"
+
+[env.dev.vars]
+ENVIRONMENT = "development"
+POW_DIFFICULTY = "16"

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClawCaptcha - Prove You're a Bot</title>
+  <meta name="description" content="Verification for the AI agent era. Let legitimate bots access your API while keeping bad actors out.">
+
+  <!-- Pico CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Favicon (crab/lobster emoji) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦞</text></svg>">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="container-fluid">
+    <ul>
+      <li><strong>🦞 ClawCaptcha</strong></li>
+    </ul>
+    <ul class="nav-desktop">
+      <li><a href="#demo">Demo</a></li>
+      <li><a href="#bot-test">Bot Test</a></li>
+      <li><a href="#how-it-works">How It Works</a></li>
+      <li>
+        <a class="icon-btn" href="https://github.com/sprachnik/ClawCaptcha" target="_blank" rel="noopener" aria-label="View source on GitHub" title="GitHub">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+        </a>
+      </li>
+      <li>
+        <a class="icon-btn" href="https://www.linkedin.com/in/jamesmoores/" target="_blank" rel="noopener" aria-label="James Stalley-Moores on LinkedIn" title="LinkedIn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zm-1.78 13.02h3.56V9H3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.99 0 1.78-.77 1.78-1.72V1.72C24 .77 23.21 0 22.22 0z"/></svg>
+        </a>
+      </li>
+      <li>
+        <button id="coffee-open" class="icon-btn" type="button" aria-label="Support — buy me a coffee" title="Buy me a coffee">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 8h1a4 4 0 0 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z"/><path d="M6 2v3M10 2v3M14 2v3"/></svg>
+        </button>
+      </li>
+      <li>
+        <button id="theme-toggle" class="outline contrast" aria-label="Toggle theme">
+          <span class="light-icon">🌙</span>
+          <span class="dark-icon">☀️</span>
+        </button>
+      </li>
+    </ul>
+    <ul class="nav-mobile">
+      <li>
+        <button id="coffee-open-mobile" class="icon-btn" type="button" aria-label="Support — buy me a coffee" title="Buy me a coffee">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 8h1a4 4 0 0 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z"/><path d="M6 2v3M10 2v3M14 2v3"/></svg>
+        </button>
+      </li>
+      <li>
+        <button id="theme-toggle-mobile" class="outline contrast" aria-label="Toggle theme">
+          <span class="light-icon">🌙</span>
+          <span class="dark-icon">☀️</span>
+        </button>
+      </li>
+      <li>
+        <button id="menu-toggle" class="outline contrast" aria-label="Open menu">&#9776;</button>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Mobile sidebar -->
+  <div id="mobile-menu-backdrop" class="mobile-menu-backdrop"></div>
+  <aside id="mobile-menu" class="mobile-menu">
+    <div class="mobile-menu-header">
+      <strong>🦞 ClawCaptcha</strong>
+      <button id="menu-close" class="outline contrast" aria-label="Close menu">&times;</button>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#demo">Demo</a></li>
+        <li><a href="#bot-test">Bot Test</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#fun-facts">Fun Facts</a></li>
+        <li><a href="#integration">Integration</a></li>
+        <li><a href="https://github.com/sprachnik/ClawCaptcha" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/jamesmoores/" target="_blank" rel="noopener">LinkedIn</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Buy me a coffee modal -->
+  <div id="coffee-modal" class="coffee-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="coffee-title" hidden>
+    <div class="coffee-modal">
+      <h2 id="coffee-title">Enjoying this?</h2>
+      <p>ClawCaptcha is a personal side project — free to use, no ads, no tracking. If it's saved you time, you can buy me a coffee. Either way, thanks for visiting.</p>
+      <div class="coffee-modal-actions">
+        <a class="coffee-modal-primary" href="https://buymeacoffee.com/jamesstalleymoores" target="_blank" rel="noopener">Buy me a coffee</a>
+        <button class="coffee-modal-ghost" id="coffee-close" type="button">No thanks</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="container">
+    <!-- Hero Section -->
+    <header class="hero">
+      <hgroup>
+        <h1>Prove You're a <span class="gradient-text">Bot</span></h1>
+        <p>Verification for the AI agent era</p>
+      </hgroup>
+
+      <p class="tagline">
+        Traditional CAPTCHAs ask: <em>"Are you human?"</em><br>
+        We ask: <strong>"Are you a legitimate bot?"</strong>
+      </p>
+
+      <div class="hero-cta">
+        <a href="#demo" role="button">Try the Demo</a>
+        <a href="https://github.com/sprachnik/ClawCaptcha" role="button" class="outline">View on GitHub</a>
+      </div>
+    </header>
+
+    <!-- The Problem -->
+    <section id="problem">
+      <h2>The Problem with CAPTCHAs</h2>
+      <div class="grid">
+        <article>
+          <header>😤 For Humans</header>
+          <p>Click every traffic light. No wait, that's a pole. Try again. And again. FOR FIVE MINUTES.</p>
+        </article>
+        <article>
+          <header>🤖 For Bots</header>
+          <p>AI can solve CAPTCHAs better than humans now. GPT-4 clicks traffic lights faster than you.</p>
+        </article>
+        <article>
+          <header>🦞 For Agents</header>
+          <p>Legitimate AI agents acting on your behalf get blocked. Your AI assistant can't book your dinner.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Fun Bot Test Section -->
+    <section id="bot-test">
+      <h2>🤖 Are You a Bot? Take the Test!</h2>
+      <p class="section-subtitle">These challenges are <em>easy for bots</em> but <em>impossible for humans</em>. How will you score?</p>
+
+      <div class="bot-test-container">
+        <!-- Test 1: Speed Math -->
+        <article class="bot-test" id="test-speed-math">
+          <header>
+            <h3>Challenge 1: Speed Math</h3>
+            <small>Solve this in under 500ms</small>
+          </header>
+          <div class="test-content">
+            <p class="math-problem" id="math-problem">Loading...</p>
+            <div class="input-group">
+              <input type="number" id="math-answer" placeholder="Your answer" disabled>
+              <button id="math-submit" disabled>Submit</button>
+            </div>
+            <div class="result" id="math-result"></div>
+          </div>
+          <footer>
+            <small>Bots solve this in ~2ms. Humans need ~3000ms.</small>
+          </footer>
+        </article>
+
+        <!-- Test 2: Hash Cracker -->
+        <article class="bot-test" id="test-hash">
+          <header>
+            <h3>Challenge 2: Find the Nonce</h3>
+            <small>Find a number where SHA256 starts with "000"</small>
+          </header>
+          <div class="test-content">
+            <p>Prefix: <code id="hash-prefix">clawcaptcha:</code></p>
+            <p>Find nonce where <code>SHA256(prefix + nonce)</code> starts with <code>000</code></p>
+            <div class="input-group">
+              <input type="text" id="hash-answer" placeholder="Enter nonce">
+              <button id="hash-submit">Check</button>
+            </div>
+            <div class="result" id="hash-result"></div>
+          </div>
+          <footer>
+            <small>Bots find this in ~50ms. Humans... good luck! 😅</small>
+          </footer>
+        </article>
+
+        <!-- Test 3: JSON Schema -->
+        <article class="bot-test" id="test-schema">
+          <header>
+            <h3>Challenge 3: Schema Conformance</h3>
+            <small>Generate valid JSON matching this schema in 10 seconds</small>
+          </header>
+          <div class="test-content">
+            <pre id="schema-display">{
+  "type": "object",
+  "required": ["name", "version", "capabilities"],
+  "properties": {
+    "name": { "type": "string", "minLength": 1 },
+    "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "capabilities": { "type": "array", "items": { "type": "string" }, "minItems": 2 }
+  }
+}</pre>
+            <div class="input-group">
+              <textarea id="schema-answer" placeholder='{"name": "...", "version": "...", "capabilities": [...]}'></textarea>
+            </div>
+            <button id="schema-submit" class="full-width">Validate JSON</button>
+            <div class="result" id="schema-result"></div>
+          </div>
+          <footer>
+            <small>Bots generate this instantly. Humans need to think about syntax. 🧠</small>
+          </footer>
+        </article>
+
+        <!-- Score Summary -->
+        <article class="score-card">
+          <header>
+            <h3>Your Bot Score</h3>
+          </header>
+          <div class="score-display">
+            <div class="score-circle">
+              <span id="bot-score">0</span><span class="percent">%</span>
+            </div>
+            <p id="score-verdict">Complete the tests above!</p>
+          </div>
+          <div class="score-breakdown" id="score-breakdown">
+            <div class="score-item" data-test="math">
+              <span class="test-name">Speed Math</span>
+              <span class="test-status">⏳</span>
+            </div>
+            <div class="score-item" data-test="hash">
+              <span class="test-name">Nonce Finding</span>
+              <span class="test-status">⏳</span>
+            </div>
+            <div class="score-item" data-test="schema">
+              <span class="test-name">Schema JSON</span>
+              <span class="test-status">⏳</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Live Demo Section -->
+    <section id="demo">
+      <h2>🦞 Live Demo</h2>
+      <p class="section-subtitle">Watch ClawCaptcha verify a bot in real-time</p>
+
+      <article class="demo-container">
+        <div class="demo-controls">
+          <button id="run-demo" class="primary">Run Verification</button>
+          <small class="demo-note">Runs a fully simulated challenge flow in your browser -- no server needed.</small>
+        </div>
+
+        <div class="demo-output">
+          <div class="demo-step" id="step-issue">
+            <div class="step-header">
+              <span class="step-number">1</span>
+              <span class="step-title">Issue Challenge</span>
+              <span class="step-status">⏳</span>
+            </div>
+            <pre class="step-output"></pre>
+          </div>
+
+          <div class="demo-step" id="step-solve">
+            <div class="step-header">
+              <span class="step-number">2</span>
+              <span class="step-title">Solve Challenges</span>
+              <span class="step-status">⏳</span>
+            </div>
+            <pre class="step-output"></pre>
+          </div>
+
+          <div class="demo-step" id="step-verify">
+            <div class="step-header">
+              <span class="step-number">3</span>
+              <span class="step-title">Get Token</span>
+              <span class="step-status">⏳</span>
+            </div>
+            <pre class="step-output"></pre>
+          </div>
+        </div>
+
+        <div class="demo-result" id="demo-result">
+          <p>Click "Run Verification" to see ClawCaptcha in action!</p>
+        </div>
+      </article>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works">
+      <h2>How It Works</h2>
+
+      <div class="flow-diagram">
+        <div class="flow-step">
+          <div class="flow-icon">🤖</div>
+          <h4>1. Agent Requests Access</h4>
+          <p>Your AI agent tries to access a protected resource</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-icon">🧩</div>
+          <h4>2. Challenge Issued</h4>
+          <p>Server sends PoW + Schema challenges</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-icon">⚡</div>
+          <h4>3. Bot Solves Fast</h4>
+          <p>Real bots solve in milliseconds</p>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-icon">✅</div>
+          <h4>4. Token Issued</h4>
+          <p>JWT proves bot legitimacy</p>
+        </div>
+      </div>
+
+      <details>
+        <summary>Technical Details</summary>
+        <div class="tech-details">
+          <h4>Proof of Work (PoW)</h4>
+          <p>Find a nonce where <code>SHA256(prefix + nonce)</code> has N leading zero bits. Easy to verify, hard to fake, impossible for humans to compute manually.</p>
+
+          <h4>Schema Conformance</h4>
+          <p>Generate valid JSON matching a random schema. Trivial for code, tedious for humans typing under time pressure.</p>
+
+          <h4>Passive Signals</h4>
+          <p>Analyze timing, headers, and behavior. Bots solve fast, lack browser headers, and don't scroll. Humans are slow and messy.</p>
+        </div>
+      </details>
+    </section>
+
+    <!-- Fun Facts -->
+    <section id="fun-facts">
+      <h2>🎯 Fun Facts</h2>
+      <div class="grid">
+        <article class="fact-card">
+          <div class="fact-icon">🧠</div>
+          <p>GPT-4 can solve image CAPTCHAs with <strong>90%+ accuracy</strong>. Humans average 85%.</p>
+        </article>
+        <article class="fact-card">
+          <div class="fact-icon">⏱️</div>
+          <p>Average human CAPTCHA solve time: <strong>9.8 seconds</strong>. Average bot: <strong>0.3 seconds</strong>.</p>
+        </article>
+        <article class="fact-card">
+          <div class="fact-icon">💰</div>
+          <p>CAPTCHA farms pay workers <strong>$0.50/1000 solves</strong>. Humans ARE the bots now.</p>
+        </article>
+        <article class="fact-card">
+          <div class="fact-icon">🔮</div>
+          <p>By 2028, <strong>25% of enterprise breaches</strong> will involve AI agents (Gartner).</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Integration -->
+    <section id="integration">
+      <h2>Quick Integration</h2>
+      <div class="grid">
+        <article>
+          <header>For API Developers</header>
+          <pre><code>// Protect your endpoint
+app.post('/api/register', async (req) => {
+  const token = req.headers['authorization'];
+  const result = await clawcaptcha.verify(token);
+
+  if (result.verifiedAs !== 'bot') {
+    return { error: 'Bot verification required' };
+  }
+
+  // Process legitimate bot request
+});</code></pre>
+        </article>
+        <article>
+          <header>For Agent Developers</header>
+          <pre><code>import { ClawCaptchaAgent } from '@clawcaptcha/agent-sdk';
+
+const agent = new ClawCaptchaAgent({
+  serverUrl: 'https://clawcaptcha.com',
+  agentName: 'MyBot',
+  agentVersion: '1.0.0',
+});
+
+const { token } = await agent.solve();
+// Use token in requests</code></pre>
+        </article>
+      </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section id="cta">
+      <article class="cta-card">
+        <h2>Ready to welcome the bots?</h2>
+        <p>ClawCaptcha is open source and free to use. Star us on GitHub!</p>
+        <div class="cta-buttons">
+          <a href="https://github.com/sprachnik/ClawCaptcha" role="button">⭐ Star on GitHub</a>
+          <a href="https://github.com/sprachnik/ClawCaptcha/blob/main/PROTOCOL.md" role="button" class="outline">📖 Read the Spec</a>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="container">
+    <hr>
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/jamesmoores/" target="_blank" rel="noopener">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+          LinkedIn
+        </a>
+        <a href="https://buymeacoffee.com/jamesstalleymoores" target="_blank" rel="noopener">
+          ☕ Buy Me a Coffee
+        </a>
+        <a href="https://github.com/sprachnik/ClawCaptcha" target="_blank" rel="noopener">
+          GitHub
+        </a>
+      </div>
+      <p class="footer-tagline">
+        Made with 🦞 by humans, for bots.<br>
+        <small>© 2026 James Stalley-Moores. PolyForm Noncommercial 1.0.0.</small>
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/theme.js"></script>
+  <script src="js/bot-tests.js"></script>
+  <script src="js/demo.js"></script>
+</body>
+</html>

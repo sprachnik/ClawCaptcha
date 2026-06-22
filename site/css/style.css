@@ -66,20 +66,9 @@ section h2 {
   opacity: 0.8;
 }
 
-/* Theme toggle button */
-#theme-toggle,
-#theme-toggle-mobile {
-  padding: 0.5rem 0.75rem;
-  font-size: 1.25rem;
-  border-radius: 50%;
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Personal-site icon buttons (GitHub, LinkedIn, Coffee) */
-.icon-btn {
+/* Personal-site icon buttons (GitHub, LinkedIn, Coffee, theme, menu) */
+a.icon-btn,
+button.icon-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -92,17 +81,36 @@ section h2 {
   background: transparent;
   color: var(--pico-color);
   cursor: pointer;
-  transition: border-color 0.15s, color 0.15s, transform 0.15s;
+  transition: border-color 0.15s, color 0.15s, transform 0.15s, background-color 0.15s;
+  line-height: 1;
 }
 
-.icon-btn:hover {
+a.icon-btn:hover,
+button.icon-btn:hover,
+a.icon-btn:focus-visible,
+button.icon-btn:focus-visible {
   border-color: var(--pico-primary);
   color: var(--pico-primary);
+  background: transparent;
   transform: translateY(-1px);
   text-decoration: none;
+  outline: none;
 }
 
-.icon-btn svg {
+a.icon-btn svg,
+button.icon-btn svg {
+  display: block;
+  color: inherit;
+}
+
+/* Light/dark icon visibility for the theme-toggle SVGs */
+[data-theme="light"] .icon-btn .dark-icon,
+[data-theme="dark"] .icon-btn .light-icon {
+  display: none;
+}
+
+[data-theme="light"] .icon-btn .light-icon,
+[data-theme="dark"] .icon-btn .dark-icon {
   display: block;
 }
 
@@ -187,16 +195,6 @@ section h2 {
 .coffee-modal-ghost:hover {
   border-color: var(--pico-primary);
   color: var(--pico-primary);
-}
-
-[data-theme="light"] .dark-icon,
-[data-theme="dark"] .light-icon {
-  display: none;
-}
-
-[data-theme="light"] .light-icon,
-[data-theme="dark"] .dark-icon {
-  display: inline;
 }
 
 /* Bot Test Section */
@@ -664,11 +662,26 @@ code {
   display: none;
 }
 
-#menu-toggle {
-  font-size: 1.4rem;
-  padding: 0.4rem 0.65rem;
-  border-radius: var(--pico-border-radius);
-  line-height: 1;
+/* Tighten the spacing on the action-icon strip */
+.nav-desktop,
+.nav-mobile {
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.nav-desktop > li,
+.nav-mobile > li {
+  margin: 0;
+  padding: 0;
+}
+
+/* Slight separator between the page links and the icon strip */
+.nav-desktop > li:has(> .icon-btn) + li > .icon-btn {
+  /* no-op marker for future tweaks */
+}
+
+.nav-desktop > li:not(:has(> .icon-btn)) + li:has(> .icon-btn) {
+  margin-left: 0.5rem;
 }
 
 .mobile-menu-backdrop {

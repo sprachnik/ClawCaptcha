@@ -12,6 +12,14 @@
   --flow-arrow-color: var(--pico-muted-color);
 }
 
+/* Snapshot the body text colour into a variable that Pico's <button> rule
+   can't redeclare from under us — Pico re-sets --pico-color to
+   --pico-primary-inverse (white) on buttons, which was making the icon-btn
+   SVGs invisible in light mode. */
+body {
+  --site-text: var(--pico-color);
+}
+
 [data-theme="dark"] {
   --gradient-start: #ff8787;
   --gradient-end: #63e6be;
@@ -79,7 +87,7 @@ button.icon-btn {
   border: 1px solid var(--pico-muted-border-color);
   border-radius: var(--pico-border-radius);
   background: transparent;
-  color: var(--pico-color);
+  color: var(--site-text);
   cursor: pointer;
   transition: border-color 0.15s, color 0.15s, transform 0.15s, background-color 0.15s;
   line-height: 1;
@@ -658,30 +666,21 @@ code {
 
 /* ==================== Mobile menu ==================== */
 
-.nav-mobile {
-  display: none;
-}
-
-/* Tighten the spacing on the action-icon strip */
-.nav-desktop,
-.nav-mobile {
+/* The icon strip is shown at all widths; the page links live in the
+   menu-toggle dropdown sidebar. */
+.nav-desktop {
+  display: flex;
   align-items: center;
   gap: 0.35rem;
 }
 
-.nav-desktop > li,
-.nav-mobile > li {
+.nav-desktop > li {
   margin: 0;
   padding: 0;
 }
 
-/* Slight separator between the page links and the icon strip */
-.nav-desktop > li:has(> .icon-btn) + li > .icon-btn {
-  /* no-op marker for future tweaks */
-}
-
-.nav-desktop > li:not(:has(> .icon-btn)) + li:has(> .icon-btn) {
-  margin-left: 0.5rem;
+.nav-mobile {
+  display: none;
 }
 
 .mobile-menu-backdrop {
@@ -755,13 +754,6 @@ code {
 
 /* Tablets and below */
 @media (max-width: 768px) {
-  .nav-desktop {
-    display: none;
-  }
-
-  .nav-mobile {
-    display: flex;
-  }
 
   .hero {
     padding: 2rem 0 1.5rem;
